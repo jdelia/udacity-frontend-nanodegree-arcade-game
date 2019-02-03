@@ -9,8 +9,8 @@ class Enemy {
     this.y = y + 62;
     this.speed = speed;
     this.width = 101;
-    this.boundary = this..width * 5;
-    this.resetPosition = -this..width;
+    this.boundary = this.width * 5;
+    this.resetPosition = -this.width;
   }
   // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
@@ -51,7 +51,7 @@ class Hero {
       // did hero position collide with any of the enemies?
       if (
         this.y === enemy.y &&
-        (enemy.x + enemy..width > this.x && enemy.x < this.x + this.width)
+        (enemy.x + enemy.width > this.x && enemy.x < this.x + this.width)
       ) {
         console.log("Collide!");
       }
