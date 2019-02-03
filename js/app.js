@@ -35,6 +35,7 @@ class Hero {
   constructor() {
     this.width = 101;
     this.height = 83;
+    this.success = false;
     this.sprite = "images/char-cat-girl.png";
     this.startX = this.width * 2;
     this.startY = this.height * 5 - 21;
@@ -51,11 +52,22 @@ class Hero {
       // did hero position collide with any of the enemies?
       if (
         this.y === enemy.y &&
-        (enemy.x + enemy.width > this.x && enemy.x < this.x + this.width)
+        (enemy.x + enemy.width * 0.5 > this.x &&
+          enemy.x < this.x + this.width * 0.5)
       ) {
-        console.log("Collide!");
+        this.reset();
+      } else {
+        if (this.y + 21 === 0) {
+          this.success = true;
+        }
       }
     }
+  }
+
+  reset() {
+    this.x = this.startX;
+    this.y = this.startY;
+    this.success = false;
   }
   /**
    * Update the players position on the game board.
@@ -81,25 +93,24 @@ class Hero {
         }
         break;
       case "down":
-        if (this.y < this.height * 4) {
+        if (this.y < this.height * 5) {
           this.y += this.height;
+          console.log(this.x, this.y, this.height * 5);
         }
         break;
     }
-    //  console.log(this.x, this.y, this.height, this.width);
   }
 }
 
 // Now instantiate your objects.
 
 // Place all enemy objects in an array called allEnemies
-const bug1 = new Enemy(-101 * 0.7, 0, 100);
+const bug1 = new Enemy(-101 * 0.7, 0, 30);
 const bug2 = new Enemy(-101, 83, 300);
 const bug3 = new Enemy(-101 * 9.5, 166, 200);
 const bug4 = new Enemy(-101 * 1.5, 166, 200);
 const allEnemies = [];
 allEnemies.push(bug1, bug2, bug3, bug4);
-//console.log(allEnemies);
 
 // Place the player object in a variable called player
 const player = new Hero();
@@ -113,6 +124,5 @@ document.addEventListener("keyup", function(e) {
     39: "right",
     40: "down"
   };
-
   player.handleInput(allowedKeys[e.keyCode]);
 });
