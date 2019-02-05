@@ -127,9 +127,9 @@ const LIVES = document.querySelector(".lives");
 
 // Place all enemy objects in an array called allEnemies
 let baseline = getRandomInt(100, 200);
-let speed1 = getRandomInt(100, 150);
-let speed2 = getRandomInt(100, 150);
-let speed3 = getRandomInt(100, 150);
+let speed1 = getRandomInt(50, 100);
+let speed2 = getRandomInt(50, 100);
+let speed3 = getRandomInt(50, 100);
 const bug1 = new Enemy(-101 * getRandomInt(5, 8), 0, baseline + speed1);
 const bug2 = new Enemy(-101 * 3.17, 0, baseline + speed1);
 const bug3 = new Enemy(-101 * getRandomInt(1, 3), 83, baseline + speed2);

@@ -46,9 +46,9 @@ var Engine = (function(global) {
     SCORE.classList.remove("red");
     // randomize the speed a bit.
     baseline = getRandomInt(100, 200);
-    speed1 = getRandomInt(100, 150);
-    speed2 = getRandomInt(100, 150);
-    speed3 = getRandomInt(100, 150);
+    speed1 = getRandomInt(50, 100);
+    speed2 = getRandomInt(50, 100);
+    speed3 = getRandomInt(50, 100);
     bug1.speed = baseline + speed1;
     bug2.speed = baseline + speed1;
     bug3.speed = baseline + speed2;
