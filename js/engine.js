@@ -37,6 +37,17 @@ var Engine = (function(global) {
     player.lives = 3;
     player.updateLives();
     SCORE.classList.remove("red");
+    // randomize the speed a bit.
+    baseline = getRandomInt(100, 200);
+    speed1 = getRandomInt(100, 150);
+    speed2 = getRandomInt(100, 150);
+    speed3 = getRandomInt(100, 150);
+    bug1.speed = baseline + speed1;
+    bug2.speed = baseline + speed1;
+    bug3.speed = baseline + speed2;
+    bug4.speed = baseline + speed2;
+    bug5.speed = baseline + speed3;
+    bug6.speed = baseline + speed3;
     // Updating lastTime seems to help with overlapping of bugs after a long pause on Play Again.
     lastTime = Date.now();
     win.requestAnimationFrame(main);
@@ -44,7 +55,7 @@ var Engine = (function(global) {
 
   canvas.width = 505;
   canvas.height = 606;
-  let container = document.querySelector(".canvas");
+  const container = document.querySelector(".canvas");
 
   container.appendChild(canvas);
 
