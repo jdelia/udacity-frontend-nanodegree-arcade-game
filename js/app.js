@@ -1,10 +1,11 @@
 // Enemy class to generate enemies our player (hero) must avoid
-
+// refactored from what was in original project repo.
 class Enemy {
   constructor(x, y, speed = 200) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = "images/enemy-bug.png";
+    this.name = "bug";
     this.x = x;
     this.y = y + 62;
     this.speed = speed;
@@ -21,6 +22,7 @@ class Enemy {
       this.x = this.resetPosition;
     }
   }
+
   // Draw the enemy on the screen, required method for game
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -33,6 +35,7 @@ class Enemy {
 
 class Hero {
   constructor() {
+    this.lives = 3;
     this.width = 101;
     this.height = 83;
     this.success = false;
@@ -65,10 +68,26 @@ class Hero {
   }
 
   reset() {
+    this.lives--;
     this.x = this.startX;
     this.y = this.startY;
     this.success = false;
+    this.updateLives();
+    if (this.lives === 0) {
+      this.success = true;
+    }
   }
+
+  /**
+   * This method updates the lives remaining for the player.
+   */
+  updateLives() {
+    if (this.lives === 1) {
+      SCORE.classList.toggle("red");
+    }
+    LIVES.innerHTML = ` ${this.lives}`;
+  }
+
   /**
    * Update the players position on the game board.
    *
@@ -95,23 +114,28 @@ class Hero {
       case "down":
         if (this.y < this.height * 5) {
           this.y += this.height;
-          console.log(this.x, this.y, this.height * 5);
         }
         break;
     }
   }
 }
 
+const SCORE = document.querySelector(".score");
+const LIVES = document.querySelector(".lives");
+
 // Now instantiate your objects.
 
 // Place all enemy objects in an array called allEnemies
-const bug1 = new Enemy(-101 * 0.7, 0, 30);
-const bug2 = new Enemy(-101, 83, 300);
-const bug3 = new Enemy(-101 * 9.5, 166, 200);
-const bug4 = new Enemy(-101 * 1.5, 166, 200);
+let baseline = getRandomInt(100, 200);
+const bug1 = new Enemy(-101 * 1.62, 0, baseline + 100);
+const bug2 = new Enemy(-101 * 4.21, 0, baseline + 100);
+const bug3 = new Enemy(-101 * 1.52, 83, baseline);
+const bug4 = new Enemy(-101 * 5.15, 83, baseline);
+const bug5 = new Enemy(-101 * 1.58, 166, baseline + 50);
+const bug6 = new Enemy(-101 * 4.25, 166, baseline + 50);
 const allEnemies = [];
-allEnemies.push(bug1, bug2, bug3, bug4);
 
+allEnemies.push(bug1, bug2, bug3, bug4, bug5, bug6);
 // Place the player object in a variable called player
 const player = new Hero();
 
@@ -126,3 +150,14 @@ document.addEventListener("keyup", function(e) {
   };
   player.handleInput(allowedKeys[e.keyCode]);
 });
+
+/**
+ * Returns randon integer.
+ * @param {number} min
+ * @param {number} max
+ */
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}

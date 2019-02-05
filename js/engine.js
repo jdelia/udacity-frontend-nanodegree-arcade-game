@@ -25,9 +25,28 @@ var Engine = (function(global) {
     lastTime,
     frameId;
 
+  const SUCCESS = document.querySelector(".success");
+  const MESSAGE = document.querySelector(".message");
+  const MESSAGEICON = document.querySelector(".message-icon");
+  const PLAYAGAIN = document.querySelector(".play-again");
+
+  PLAYAGAIN.addEventListener("click", function(e) {
+    SUCCESS.classList.toggle("show");
+    player.reset();
+    player.success = false;
+    player.lives = 3;
+    player.updateLives();
+    SCORE.classList.remove("red");
+    // Updating lastTime seems to help with overlapping of bugs after a long pause on Play Again.
+    lastTime = Date.now();
+    win.requestAnimationFrame(main);
+  });
+
   canvas.width = 505;
   canvas.height = 606;
-  doc.body.appendChild(canvas);
+  let container = document.querySelector(".canvas");
+
+  container.appendChild(canvas);
 
   /* This function serves as the kickoff point for the game loop itself
    * and handles properly calling the update and render methods.
@@ -39,6 +58,24 @@ var Engine = (function(global) {
      * would be the same for everyone (regardless of how fast their
      * computer is) - hurray time!
      */
+
+    /* Use the browser's requestAnimationFrame function to call this
+     * function again as soon as the browser is able to draw another frame.
+     */
+    if (player.success === true) {
+      win.cancelAnimationFrame(frameId);
+      SUCCESS.classList.toggle("show");
+      if (player.lives === 0) {
+        MESSAGEICON.innerHTML = '<img src="images/Frown.png" />';
+        MESSAGE.innerHTML = "Sorry. Game over.";
+      } else {
+        MESSAGEICON.innerHTML = '<img src="images/Star.png" />';
+        MESSAGE.innerHTML = "You are a winner!";
+      }
+    } else {
+      frameId = win.requestAnimationFrame(main);
+    }
+
     var now = Date.now(),
       dt = (now - lastTime) / 1000.0;
 
@@ -47,22 +84,13 @@ var Engine = (function(global) {
      */
     update(dt);
     render();
-
+    if (bug1.x === bug2.x) {
+      console.log(bug1.x, bug2.x);
+    }
     /* Set our lastTime variable which is used to determine the time delta
      * for the next time this function is called.
      */
     lastTime = now;
-
-    /* Use the browser's requestAnimationFrame function to call this
-     * function again as soon as the browser is able to draw another frame.
-     */
-    if (player.success === true) {
-      win.cancelAnimationFrame(frameId);
-      console.log("Game Over");
-      gameover();
-    } else {
-      frameId = win.requestAnimationFrame(main);
-    }
   }
 
   /* This function does some initial setup that should only occur once,
@@ -86,7 +114,6 @@ var Engine = (function(global) {
    */
   function update(dt) {
     updateEntities(dt);
-    // checkCollisions();
   }
 
   /* This is called by the update function and loops through all of the
@@ -168,9 +195,7 @@ var Engine = (function(global) {
    * handle game reset states - maybe a new game menu or a game over screen
    * those sorts of things. It's only called once by the init() method.
    */
-  function reset() {
-    // noop
-  }
+  function reset() {}
 
   /* Go ahead and load all of the images we know we're going to need to
    * draw our game level. Then set init as the callback method, so that when
@@ -181,6 +206,7 @@ var Engine = (function(global) {
     "images/water-block.png",
     "images/grass-block.png",
     "images/enemy-bug.png",
+    "images/gem-blue.png",
     "images/char-boy.png",
     "images/char-cat-girl.png"
   ]);
