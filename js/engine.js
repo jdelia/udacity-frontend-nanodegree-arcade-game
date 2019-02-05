@@ -103,9 +103,6 @@ var Engine = (function(global) {
      */
     update(dt);
     render();
-    if (bug1.x === bug2.x) {
-      console.log(bug1.x, bug2.x);
-    }
     /* Set our lastTime variable which is used to determine the time delta
      * for the next time this function is called.
      */
