@@ -30,7 +30,14 @@ var Engine = (function(global) {
   const MESSAGEICON = document.querySelector(".message-icon");
   const PLAYAGAIN = document.querySelector(".play-again");
 
-  PLAYAGAIN.addEventListener("click", function(e) {
+  PLAYAGAIN.addEventListener("click", playAgain);
+  PLAYAGAIN.addEventListener("keypress", function(e) {
+    if (e.keycode === 13) {
+      playAgain;
+    }
+  });
+
+  function playAgain() {
     SUCCESS.classList.toggle("show");
     player.reset();
     player.success = false;
@@ -51,7 +58,7 @@ var Engine = (function(global) {
     // Updating lastTime seems to help with overlapping of bugs after a long pause on Play Again.
     lastTime = Date.now();
     win.requestAnimationFrame(main);
-  });
+  }
 
   canvas.width = 505;
   canvas.height = 606;
@@ -76,6 +83,7 @@ var Engine = (function(global) {
     if (player.success === true) {
       win.cancelAnimationFrame(frameId);
       SUCCESS.classList.toggle("show");
+      PLAYAGAIN.focus();
       if (player.lives === 0) {
         MESSAGEICON.innerHTML = '<img src="images/Frown.png" />';
         MESSAGE.innerHTML = "Sorry. Game over.";
